@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, System.Types, FMX.StdCtrls, FMX.Types, FMX.Objects, System.UITypes,
   System.SysUtils, FMX.Layouts, FMX.Forms, FGX.ProgressDialog,
-  FMX.Graphics, FMX.Ani, FMX.Filter.Effects, Mobile.View.Principal,
+  FMX.Graphics, FMX.Ani, FMX.Filter.Effects,
   FMX.VirtualKeyboard, FMX.Platform;
 
 type
@@ -17,7 +17,6 @@ type
     class var FTransition: TLineTransitionEffect;
     class var FAnimacao: TFLoatAnimation;
     class var FMessagem: TLabel;
-    //class var FfgActivityDialog: TfgActivityDialog;
   public
     class procedure Show(Msg: String);
     class procedure Hide;
@@ -141,12 +140,7 @@ begin
     FFundo := nil;
     FLayout := nil;
   end;
-
-//  if Assigned(FfgActivityDialog) then
-//  begin
-//    FfgActivityDialog.Hide;
-//    FreeAndNil(FfgActivityDialog);
-//  end;
+  
 end;
 
 end.
