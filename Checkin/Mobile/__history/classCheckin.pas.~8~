@@ -1,0 +1,46 @@
+unit classCheckin;
+
+interface
+
+type
+  TClassCheckin = Class
+  private
+    FEmpresa: String;
+    FDtCheckout: TDateTime;
+    FChkOutLatitude: Double;
+    FDtCheckin: TDateTime;
+    FChkInLatitude: Double;
+    FChkOutLongitude: Double;
+    FEndereco: String;
+    FChkInLongitude: Double;
+
+  public
+    property Empresa : String read FEmpresa write FEmpresa;
+    property Endereco : String read FEndereco write FEndereco;
+    property DtCheckin : TDateTime read FDtCheckin write FDtCheckin;
+    property ChkInLatitude : Double read FChkInLatitude write FChkInLatitude;
+    property ChkInLongitude : Double read FChkInLongitude write FChkInLongitude;
+    property DtCheckout : TDateTime read FDtCheckout write FDtCheckout;
+    property ChkOutLatitude : Double read FChkOutLatitude write FChkOutLatitude;
+    property ChkOutLongitude : Double read FChkOutLongitude write FChkOutLongitude;
+
+    Constructor Create;
+    Destructor  Destroy; Override;
+  end;
+
+implementation
+
+{ TClassCheckin }
+
+constructor TClassCheckin.Create;
+begin
+
+end;
+
+destructor TClassCheckin.Destroy;
+begin
+
+  inherited;
+end;
+
+end.

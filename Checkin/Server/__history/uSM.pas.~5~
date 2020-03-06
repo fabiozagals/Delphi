@@ -1,0 +1,66 @@
+unit uSM;
+
+interface
+
+uses System.SysUtils, System.Classes, System.Json,
+    DataSnap.DSProviderDataModuleAdapter, REST.Json,
+    Datasnap.DSServer, Datasnap.DSAuth;
+
+type
+  TSM = class(TDSServerModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function Localizacao : TJSONObject; // GET LOCALIZA플O
+    function updateLocalizacao : TJSONValue; // POST LOCALIZA플O
+    function activeLocalizacao : TJSONValue; // PUT LOCALIZA플O
+    function cancelLocalizacao : TJSONValue; // DELETE LOCALIZA플O
+  end;
+
+implementation
+
+
+{$R *.dfm}
+
+uses uLocalizacao;
+
+
+{ TSM }
+
+function TSM.Localizacao: TJSONObject;
+var
+  Loc : TLocalizacao;
+begin
+  Loc := TLocalizacao.Create;
+  try
+    Loc.Nome     := 'Teste';
+    Loc.Endereco := 'Av Amazonas, 2086';
+    Loc.Bairro   := 'Barro Preto';
+    Loc.Cidade   := 'Belo Horizonte';
+    Loc.Estado   := 'MG';
+    Loc.Pais     := 'Brasil';
+
+    Result := TJson.ObjectToJsonObject(Loc);
+  finally
+    FreeAndNil(Loc);
+  end;
+end;
+
+function TSM.updateLocalizacao: TJSONValue;
+begin
+ Result := 'sdss';
+end;
+
+function TSM.activeLocalizacao: TJSONValue;
+begin
+  Result := 'sdss';
+end;
+
+function TSM.cancelLocalizacao: TJSONValue;
+begin
+  Result := 'sdss';
+end;
+
+end.
+

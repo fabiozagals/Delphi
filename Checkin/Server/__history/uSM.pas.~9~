@@ -1,0 +1,70 @@
+unit uSM;
+
+interface
+
+uses System.SysUtils, System.Classes, System.Json,
+    DataSnap.DSProviderDataModuleAdapter, REST.Json,
+    Datasnap.DSServer, Datasnap.DSAuth;
+
+type
+  TSM = class(TDSServerModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function Localizacao : TJSONObject; // GET LOCALIZA플O
+    function activeLocalizacao(JsonObject : TJSONObject) : TJSONValue; // PUT LOCALIZA플O
+    function updateLocalizacao(JsonObject : TJSONObject) : TJSONValue; // POST LOCALIZA플O
+    function cancelLocalizacao(ID : Integer) : TJSONValue; // DELETE LOCALIZA플O
+  end;
+
+implementation
+
+
+{$R *.dfm}
+
+uses uLocalizacao;
+
+
+{ TSM }
+
+function TSM.Localizacao: TJSONObject;
+var
+  Loc : TLocalizacao;
+begin
+  Loc := TLocalizacao.Create;
+  try
+    Loc.Nome     := 'Teste';
+    Loc.Endereco := 'Av Amazonas, 2086';
+    Loc.Bairro   := 'Barro Preto';
+    Loc.Cidade   := 'Belo Horizonte';
+    Loc.Estado   := 'MG';
+    Loc.Pais     := 'Brasil';
+    Loc.DataHora := NOW;
+
+    Result := TJson.ObjectToJsonObject(Loc);
+  finally
+    FreeAndNil(Loc);
+  end;
+end;
+
+function TSM.updateLocalizacao(JsonObject : TJSONObject): TJSONValue;
+begin
+  Result := TJSONString.Create('Registro Alterado!');
+end;
+
+function TSM.activeLocalizacao(JsonObject : TJSONObject): TJSONValue;
+var
+  Loc : TLocalizacao;
+begin
+  Loc := TJson.JsonToObject<TLocalizacao>(JsonObject);
+  Result := TJSONString.Create('Registro Incluido');
+end;
+
+function TSM.cancelLocalizacao(ID : Integer): TJSONValue;
+begin
+  Result := TJSONString.Create('Registro Excluido!');
+end;
+
+end.
+

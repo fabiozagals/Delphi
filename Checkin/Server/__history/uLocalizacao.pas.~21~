@@ -1,0 +1,123 @@
+unit uLocalizacao;
+
+interface
+
+uses
+  FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, System.SysUtils, uConexao;
+
+
+type
+  TLocalizacao = Class
+  private
+    FBairro: String;
+    FNome: String;
+    FCidade: String;
+    FPais: String;
+    FEndereco: String;
+    FEstado: String;
+    FDataHora: TDateTime;
+
+    Conn : TConexao;
+    Query : TFDQuery;
+  public
+    property Nome : String read FNome write FNome;
+    property Endereco : String read FEndereco write FEndereco;
+    property Bairro : String read FBairro write FBairro;
+    property Cidade : String read FCidade write FCidade;
+    property Estado : String read FEstado write FEstado;
+    property Pais : String read FPais write FPais;
+    property DataHora : TDateTime read FDataHora write FDataHora;
+
+    function BuscarLocalizacao : Boolean;
+    procedure InserirLocalizacao;
+    procedure AlterarLocalizacao(ID : Integer);
+    procedure DeleterLocalizacao(ID : Integer);
+
+    Constructor Create;
+    Destructor Destroy; override;
+
+  end;
+
+implementation
+
+{ TLocalizacao }
+
+procedure TLocalizacao.InserirLocalizacao;
+begin
+  try
+    Query.Close;
+    Query.SQL.Add('Insert Into Checkin (Usuario, Endereco, Bairro, Cidade, Estado, Pais) Values (:Usuario, :Endereco, :Bairro. :Cidade, :Estado, :Pais)');
+    Query.Params.ParamByName('Usuario').AsString  := Self.Nome;
+    Query.Params.ParamByName('Endereco').AsString := Self.Endereco;
+    Query.Params.ParamByName('Bairro').AsString   := Self.Bairro;
+    Query.Params.ParamByName('Cidade').AsString   := Self.Cidade;
+    Query.Params.ParamByName('Estado').AsString   := Self.Estado;
+    Query.Params.ParamByName('Pais').AsString     := Self.Pais;
+    Query.ExecSQL;
+  finally
+    FreeAndNil(Query);
+  end;
+end;
+
+procedure TLocalizacao.AlterarLocalizacao(ID : Integer);
+begin
+  try
+    Query.Close;
+    Query.SQL.Add('Alter Table Checkin Set Usuario = :Usuario, Endereco = :Endereco, Bairro = :Bairro, Cidade = :Cidade, Estado = :Estado, Pais = :Pais Where ID = :ID');
+    Query.Params.ParamByName('Usuario').AsString  := Self.Nome;
+    Query.Params.ParamByName('Endereco').AsString := Self.Endereco;
+    Query.Params.ParamByName('Bairro').AsString   := Self.Bairro;
+    Query.Params.ParamByName('Cidade').AsString   := Self.Cidade;
+    Query.Params.ParamByName('Estado').AsString   := Self.Estado;
+    Query.Params.ParamByName('Pais').AsString     := Self.Pais;
+    Query.Params.ParamByName('ID').AsInteger      := ID;
+    Query.ExecSQL;
+  finally
+    FreeAndNil(Query);
+  end;
+end;
+
+function TLocalizacao.BuscarLocalizacao: Boolean;
+begin
+  try
+    Query.Close;
+    Query.SQL.Add('Select * from localizacao');
+    Query.Open;
+  finally
+    FreeAndNil(Query);
+  end;
+end;
+
+constructor TLocalizacao.Create;
+begin
+  Conn  := TConexao.Create;
+  Query := TFDQuery.Create(nil);
+  Query.Connection := Conn.GetConn;
+end;
+
+procedure TLocalizacao.DeleterLocalizacao(ID: Integer);
+var
+  Query : TFDQuery;
+begin
+  Query := TFDQuery.Create(nil);
+  try
+    Query.Close;
+    Query.SQL.Add('Delete From Checkin Where ID = :ID');
+    Query.Params.ParamByName('ID').AsInteger := ID;
+    Query.ExecSQL;
+  finally
+    FreeAndNil(Query);
+  end;
+end;
+
+destructor TLocalizacao.Destroy;
+begin
+  FreeAndNil(Query);
+  FreeAndNil(Conn);
+  inherited;
+end;
+
+end.

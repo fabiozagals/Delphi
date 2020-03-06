@@ -1,0 +1,29 @@
+unit classCheckin;
+
+interface
+
+type
+  TClassCheckin = Class
+    private
+    FEmpresa: String;
+    procedure SetEmpresa(const Value: String);
+
+    public
+      property Empresa : String read FEmpresa write SetEmpresa;
+
+      Constructor Create;
+      Destructor  Destroy; Override;
+
+
+  end;
+
+implementation
+
+{ TClassCheckin }
+
+procedure TClassCheckin.SetEmpresa(const Value: String);
+begin
+  FEmpresa := Value;
+end;
+
+end.

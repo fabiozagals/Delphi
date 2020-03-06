@@ -1,0 +1,339 @@
+unit uCheckin;
+
+interface
+
+uses
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
+  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
+  uFrmModelo, System.Actions, FMX.ActnList, FMX.TabControl, System.Generics.Collections,
+  FMX.Controls.Presentation, FMX.Layouts, FMX.Maps, System.Sensors, System.Sensors.Components,
+  FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base, DB,
+  FMX.ListView, FMX.ListBox, MultiDetailAppearanceU, System.Rtti,
+  System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
+  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope, FMX.Edit,
+  FGX.ProgressDialog, FMX.Ani;
+
+  type
+  TCheck = class(TObject)
+    Empresa: String;
+    Endereco: String;
+    DtCheckin: TDateTime;
+    ChkInLatitude : Double;
+    ChkInLongitude : Double;
+    DtCheckout: TDateTime;
+    ChkOutLatitude : Double;
+    ChkOutLongitude : Double;
+  end;
+
+  type
+  TfrmCheckin = class(TfrmFrmModelo)
+    spbNovo: TSpeedButton;
+    ListView1: TListView;
+    LocSensor: TLocationSensor;
+    BindSourceDB1: TBindSourceDB;
+    BindingsList1: TBindingsList;
+    LinkListControlToField1: TLinkListControlToField;
+    tlbInferior: TToolBar;
+    MapView1: TMapView;
+    spbCheck: TSpeedButton;
+    tlbSuperior: TToolBar;
+    Label2: TLabel;
+    SpeedButton1: TSpeedButton;
+    lstCliente: TListBox;
+    ListBoxItem1: TListBoxItem;
+    Label1: TLabel;
+    edtCliente: TEdit;
+    spbSelCli: TSpeedButton;
+    tbItemClientes: TTabItem;
+    ListView2: TListView;
+    BindSourceDB2: TBindSourceDB;
+    LinkListControlToField2: TLinkListControlToField;
+    fgActivityDialog: TfgActivityDialog;
+    ListBoxItem2: TListBoxItem;
+    Label3: TLabel;
+    edtEndereco: TEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure spbNovoClick(Sender: TObject);
+    procedure spbVoltarClick(Sender: TObject);
+    procedure LocSensorLocationChanged(Sender: TObject; const OldLocation, NewLocation: TLocationCoord2D);
+    procedure ListView1ItemClick(const Sender: TObject; const AItem: TListViewItem);
+    procedure spbSelCliClick(Sender: TObject);
+    procedure ListView2ItemClick(const Sender: TObject; const AItem: TListViewItem);
+    procedure spbCheckClick(Sender: TObject);
+  private
+    FID : Integer;
+    FEmpresa : String;
+    FEndereco : String;
+    FLatitude : Double;
+    FLongitude : Double;
+    Latitude : Double;
+    Longitude : Double;
+    Marcador : TMapMarkerDescriptor;
+    MapCoord : TMapCoordinate;
+    FMarcadores : TList<TMapMarker>;
+    FMostrarMarcadores : Boolean;
+    FGeocoder : TGeocoder;
+    chkNovo : Boolean;
+    Controle : Integer;
+    Check : TCheck;
+
+    procedure LimparMarcadores;
+    procedure MudarAba(ATabItem: TTabItem; Sender: TObject);
+    procedure OnGeocodeReverseEvent(const Address : TCivicAddress);
+    procedure TratarCampos(Novo: Boolean);
+  public
+
+  end;
+
+var
+  frmCheckin: TfrmCheckin;
+
+implementation
+
+{$R *.fmx}
+
+uses uPrincipal, uDM;
+
+procedure TfrmCheckin.FormCreate(Sender: TObject);
+begin
+  tbctrlPrincipal.ActiveTab   := tbitemListagem;
+  tbctrlPrincipal.TabPosition := TTabPosition.None;
+  lblTitulo.Text := 'Check-ins';
+
+  fgActivityDialog.Title := 'Aguarde';
+  fgActivityDialog.Message := 'Carregando Check-ins...';
+  fgActivityDialog.Show;
+
+  try
+
+  // BUSCAR OS CHECKINS
+    DM.qryCheckin.Active := False;
+    Dm.qryCheckin.SQL.Text := 'SELECT '+
+                                  'CHK.ID, '+
+                                  'CLI.Nome, '+
+                                  'CLI.Codigo, '+
+                                  'CHK.Endereco, '+
+                                  'CHK.CHKOUT_LATITUDE, '+
+                                  'CHK.CHKOUT_LONGITUDE, '+
+                                  '(''Check-in: '' || strftime(''%d/%m/%Y %H:%M'',CHK.Dt_Checkin)) as Dt_Checkin, '+
+                                  '(''Check-out: '' || strftime(''%d/%m/%Y %H:%M'',CHK.Dt_Checkout)) as Dt_Checkout '+
+                              'FROM CHECKIN CHK '+
+                                  'INNER JOIN CLIENTES CLI ON CHK.EMPRESA = CLI.CODIGO '+
+                              'ORDER BY CHK.ID';
+
+    DM.qryCheckin.Active := True;
+    DM.qryClientes.Active := True;
+
+    FMarcadores := TList<TMapMarker>.Create;
+    FMostrarMarcadores := True;
+  finally
+    fgActivityDialog.Hide;
+  end;
+end;
+
+procedure TfrmCheckin.spbCheckClick(Sender: TObject);
+begin
+  try
+    FEndereco := edtEndereco.Text;
+    DM.qryAux.Close;
+    if chkNovo then
+    begin
+      fgActivityDialog.Title := 'Aguarde';
+      fgActivityDialog.Message := 'Realizando Check-in...';
+      fgActivityDialog.Show;
+      DM.qryAux.SQL.Add('INSERT INTO CHECKIN (EMPRESA,ENDERECO,DT_CHECKIN,CHKIN_LATITUDE,CHKIN_LONGITUDE)');
+      DM.qryAux.SQL.Add('VALUES (:EMPRESA,:ENDERECO,:DT_CHECKIN,:CHKIN_LATITUDE,:CHKIN_LONGITUDE)');
+
+      DM.qryAux.Params.ParamByName('EMPRESA').AsString        := FEmpresa;
+      DM.qryAux.Params.ParamByName('ENDERECO').AsString       := FEndereco;
+      DM.qryAux.Params.ParamByName('DT_CHECKIN').AsDateTime   := NOW;
+      DM.qryAux.Params.ParamByName('CHKIN_LATITUDE').AsFloat  := FLatitude;
+      DM.qryAux.Params.ParamByName('CHKIN_LONGITUDE').AsFloat := FLongitude;
+    end
+    else
+    begin
+      fgActivityDialog.Title := 'Aguarde';
+      fgActivityDialog.Message := 'Realizando Check-out...';
+      fgActivityDialog.Show;
+
+      DM.qryAux.SQL.Add('UPDATE CHECKIN SET DT_CHECKOUT = :DT_CHECKOUT,');
+      DM.qryAux.SQL.Add('CHKOUT_LATITUDE = :CHKOUT_LATITUDE,');
+      DM.qryAux.SQL.Add('CHKOUT_LONGITUDE = :CHKOUT_LONGITUDE )');
+      DM.qryAux.SQL.Add('WHERE ID = :FID');
+
+      DM.qryAux.Params.ParamByName('FID').AsInteger           := FID;
+      DM.qryAux.Params.ParamByName('DT_CHECKIN').AsDateTime   := NOW;
+      DM.qryAux.Params.ParamByName('CHKIN_LATITUDE').AsFloat  := FLatitude;
+      DM.qryAux.Params.ParamByName('CHKIN_LONGITUDE').AsFloat := FLongitude;
+    end;
+    DM.qryAux.ExecSQL;
+  finally
+    fgActivityDialog.Hide;
+    if chkNovo then
+      ShowMessage('Check-in realizado com sucesso!')
+    else
+       ShowMessage('Check-out realizado com sucesso!');
+  end;
+end;
+
+procedure TfrmCheckin.spbNovoClick(Sender: TObject);
+begin
+  chkNovo := True;
+  lstCliente.Enabled := True;
+  LimparMarcadores;
+  LocSensor.Active := True;
+  Latitude  := 0;
+  Longitude := 0;
+  TratarCampos(True);
+  MudarAba(tbitemEdicao, Sender);
+  fgActivityDialog.Title := 'Aguarde';
+  fgActivityDialog.Message := 'Carregando Mapa...';
+  fgActivityDialog.Show;
+end;
+
+procedure TfrmCheckin.ListView1ItemClick(const Sender: TObject;
+  const AItem: TListViewItem);
+begin
+  chkNovo := False;
+  FID := DM.qryCheckin.FieldByName('ID').AsInteger;
+
+  if DM.qryCheckin.FieldByName('CHKIN_LATITUDE').AsFloat <> 0 then
+    Latitude  := DM.qryCheckin.FieldByName('CHKIN_LATITUDE').AsFloat
+  else
+    Latitude := 0;
+
+  if DM.qryCheckin.FieldByName('CHKIN_LONGITUDE').AsFloat <> 0 then
+    Longitude  := DM.qryCheckin.FieldByName('CHKIN_LONGITUDE').AsFloat
+  else
+    Longitude := 0;
+
+  LimparMarcadores;
+  LocSensor.Active := True;
+  TratarCampos(False);
+  MudarAba(tbitemEdicao, Sender);
+  fgActivityDialog.Title := 'Aguarde';
+  fgActivityDialog.Message := 'Carregando Mapa...';
+  fgActivityDialog.Show;
+end;
+
+procedure TfrmCheckin.ListView2ItemClick(const Sender: TObject;
+  const AItem: TListViewItem);
+begin
+  edtCliente.Text := AItem.Text;
+  FEmpresa := AItem.Detail;
+  MudarAba(tbitemEdicao, Sender);
+end;
+
+procedure TfrmCheckin.LocSensorLocationChanged(Sender: TObject; const OldLocation, NewLocation: TLocationCoord2D);
+var
+  NovaLoc : TLocationCoord2D;
+begin
+  Controle := Controle + 1;
+  if Controle > 1 then
+  begin
+    LocSensor.Active := False;
+    fgActivityDialog.Hide;
+    Controle := 0;
+    Exit;
+  end;
+
+  FormatSettings.DecimalSeparator := '.';
+  FLatitude  := NewLocation.Latitude;
+  FLongitude := NewLocation.Longitude;
+
+  if (Latitude <> 0) or (Longitude <> 0) then
+  begin
+    FLatitude  := Latitude;
+    FLongitude := Longitude;
+  end;
+
+  NovaLoc := TLocationCoord2D.Create(FLatitude,FLongitude); // Nova variável Location por conta dos endereços não novos
+
+  MapCoord           := TMapCoordinate.Create(FLatitude, FLongitude);
+  MapCoord.Latitude  := FLatitude;
+  MapCoord.Longitude := FLongitude;
+
+  Marcador           := TMapMarkerDescriptor.Create(MapCoord, 'Localização Atual');
+  Marcador.Draggable := True;
+  Marcador.Visible   := FMostrarMarcadores;
+
+  FMarcadores.Add(MapView1.AddMarker(Marcador));
+
+  MapView1.Location := FMarcadores.Last.Descriptor.Position;
+  MapView1.Zoom := 17;
+
+  if not Assigned(FGeocoder) then
+  begin
+    if Assigned(TGeocoder.Current) then
+    begin
+      FGeocoder := TGeocoder.Current.Create;
+      FGeocoder.OnGeocodeReverse := OnGeocodeReverseEvent;
+    end;
+  end;
+  if Assigned(FGeocoder) and not FGeocoder.Geocoding then
+    FGeocoder.GeocodeReverse(NovaLoc);
+
+end;
+
+procedure TfrmCheckin.MudarAba(ATabItem: TTabItem; Sender: TObject);
+begin
+  actMudarAba.Tab := ATabItem;
+  actMudarAba.ExecuteTarget(Sender);
+end;
+
+procedure TfrmCheckin.OnGeocodeReverseEvent(const Address: TCivicAddress);
+begin
+  if Address.AdminArea <> '' then
+    if chkNovo then
+      edtEndereco.Text := Address.Thoroughfare + ', '+ Address.FeatureName;
+end;
+
+procedure TfrmCheckin.spbSelCliClick(Sender: TObject);
+begin
+  MudarAba(tbItemClientes, Sender);
+end;
+
+procedure TfrmCheckin.spbVoltarClick(Sender: TObject);
+begin
+  MudarAba(tbitemListagem, Sender);
+end;
+
+procedure TfrmCheckin.TratarCampos(Novo: Boolean);
+begin
+  if Novo then
+  begin
+    spbCheck.Text := 'Check-in';
+    spbCheck.Enabled := True;
+    lstCliente.Enabled := True;
+    edtCliente.Text := '';
+    edtEndereco.Text := '';
+  end
+  else
+  begin
+    lstCliente.Enabled := False;
+    edtCliente.Text  := DM.qryCheckin.FieldByName('NOME').AsString;
+    edtEndereco.Text := DM.qryCheckin.FieldByName('ENDERECO').AsString;
+
+    if not DM.qryCheckin.FieldByName('DT_CHECKOUT').IsNull then
+    begin
+      spbCheck.Text := '';
+      spbCheck.Enabled := False;
+    end
+    else
+    begin
+      spbCheck.Text := 'Check-out';
+      spbCheck.Enabled := True;
+    end;
+  end;
+end;
+
+procedure TfrmCheckin.LimparMarcadores;
+var
+  Marcadores: TMapMarker;
+begin
+  for Marcadores in FMarcadores do
+    Marcadores.Remove;
+  FMarcadores.Clear;
+end;
+
+end.

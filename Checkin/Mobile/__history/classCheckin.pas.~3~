@@ -1,0 +1,17 @@
+unit classCheckin;
+
+interface
+
+type
+  TClassCheckin = Class
+    private
+
+    public
+      property FEmpresa;
+    protected
+
+  end;
+
+implementation
+
+end.

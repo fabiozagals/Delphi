@@ -1,0 +1,61 @@
+unit uDM;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite,
+  FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.FMXUI.Wait,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, FMX.Dialogs, Data.FireDACJSONReflect,
+  System.IOUtils, FireDAC.Stan.StorageBin;
+
+type
+  TDM = class(TDataModule)
+    FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
+    FDStanStorageBinLink1: TFDStanStorageBinLink;
+    fdcConexao: TFDConnection;
+    qryCheckin: TFDQuery;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DM: TDM;
+
+implementation
+
+{%CLASSGROUP 'FMX.Controls.TControl'}
+
+{$R *.dfm}
+
+procedure TDM.DataModuleCreate(Sender: TObject);
+begin
+   with fdcConexao do
+  begin
+      Params.Values['DriverID'] := 'SQLite';
+    {$IF DEFINED(IOS) OR DEFINED(ANDROID)}
+      try
+        Params.Values['Database'] := TPath.Combine(TPath.GetDocumentsPath, 'Chkliphit.s3db');
+        Connected := True;
+      except on E: Exception do
+        begin
+          raise Exception.Create('Erro de conexão com o banco de dados!');
+        end;
+      end;
+    {$ELSE}
+      try
+        Params.Values['Database'] := 'E:\Projeto_Checkin\Mobile\database\Chkliphit.s3db';
+        Connected := True;
+      except on E: Exception do
+        raise Exception.Create('Erro de conexão com o banco de dados!');
+      end;
+    {$ENDIF}
+  end;
+end;
+
+end.

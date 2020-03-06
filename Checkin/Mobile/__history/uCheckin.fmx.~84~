@@ -1,0 +1,291 @@
+inherited frmCheckin: TfrmCheckin
+  Caption = 'frmFrmModelo1'
+  DesignerMasterStyle = 3
+  inherited lytBase: TLayout
+    inherited tbctrlPrincipal: TTabControl
+      TabIndex = 1
+      Sizes = (
+        385s
+        496s
+        385s
+        496s
+        385s
+        496s)
+      inherited tbitemListagem: TTabItem
+        IsSelected = False
+        Size.Width = 128.000000000000000000
+        ExplicitSize.cx = 160.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited toolSuperior: TToolBar
+          inherited lblTitulo: TLabel
+            StyleLookup = 'lblTituloStyle1'
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          object spbNovo: TSpeedButton
+            Align = Right
+            IconTintColor = claWhite
+            Margins.Left = 8.000000000000000000
+            Position.X = 337.000000000000000000
+            Size.Width = 48.000000000000000000
+            Size.Height = 48.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'addtoolbutton'
+            Text = 'Go to <Tab>'
+            OnClick = spbNovoClick
+          end
+        end
+        object ListView1: TListView
+          ItemAppearanceClassName = 'TMultiDetailItemAppearance'
+          ItemEditAppearanceClassName = 'TMultiDetailDeleteAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          Align = Client
+          Size.Width = 385.000000000000000000
+          Size.Height = 448.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          ItemAppearanceObjects.ItemObjects.MultiDetail1.Font.Family = 'Arial'
+          ItemAppearanceObjects.ItemObjects.MultiDetail1.Font.Size = 16.000000000000000000
+          ItemAppearanceObjects.ItemObjects.MultiDetail1.Font.StyleExt = {00070000000000000004000000}
+          ItemAppearanceObjects.ItemObjects.MultiDetail1.TextColor = claBlack
+          ItemAppearanceObjects.ItemObjects.MultiDetail1.Width = 310.000000000000000000
+          ItemAppearanceObjects.ItemObjects.MultiDetail1.PlaceOffset.Y = -12.000000000000000000
+          ItemAppearanceObjects.ItemObjects.MultiDetail2.Font.Family = 'Arial'
+          ItemAppearanceObjects.ItemObjects.MultiDetail2.Font.StyleExt = {00070000000000000004000000}
+          ItemAppearanceObjects.ItemObjects.MultiDetail2.TextColor = claDimgray
+          ItemAppearanceObjects.ItemObjects.MultiDetail2.Width = 310.000000000000000000
+          ItemAppearanceObjects.ItemObjects.MultiDetail2.PlaceOffset.X = 1.000000000000000000
+          ItemAppearanceObjects.ItemObjects.MultiDetail2.PlaceOffset.Y = -11.000000000000000000
+          ItemAppearanceObjects.ItemObjects.MultiDetail3.Font.Family = '(Default)'
+          ItemAppearanceObjects.ItemObjects.MultiDetail3.Font.StyleExt = {00070000000000000004000000}
+          ItemAppearanceObjects.ItemObjects.MultiDetail3.TextColor = claDimgray
+          ItemAppearanceObjects.ItemObjects.MultiDetail3.Width = 310.000000000000000000
+          ItemAppearanceObjects.ItemObjects.MultiDetail3.PlaceOffset.X = 2.000000000000000000
+          ItemAppearanceObjects.ItemObjects.MultiDetail3.PlaceOffset.Y = -12.000000000000000000
+          ItemAppearanceObjects.FooterObjects.Text.Width = 348.000000000000000000
+          ItemAppearanceObjects.FooterObjects.Text.Height = 48.000000000000000000
+          StyleLookup = 'listviewstyle'
+          OnItemClick = ListView1ItemClick
+          ShowSelection = False
+        end
+      end
+      inherited tbitemEdicao: TTabItem
+        IsSelected = True
+        Size.Width = 128.000000000000000000
+        ExplicitSize.cx = 160.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        object tlbInferior: TToolBar
+          Align = Bottom
+          Position.Y = 448.000000000000000000
+          Size.Width = 385.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          TintColor = xFF0E2430
+          object SpeedButton2: TSpeedButton
+            Align = Contents
+            StyledSettings = [Family]
+            Size.Width = 385.000000000000000000
+            Size.Height = 48.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Check-in'
+            TextSettings.Font.Size = 18.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            TextSettings.FontColor = claWhite
+          end
+        end
+        object MapView1: TMapView
+          Align = Client
+          Size.Width = 385.000000000000000000
+          Size.Height = 359.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object tlbSuperior: TToolBar
+          Size.Width = 385.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          TintColor = xFF0E2430
+          object Label2: TLabel
+            Align = Contents
+            StyledSettings = [Family, Size]
+            Margins.Left = 8.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 377.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            TextSettings.FontColor = claWhite
+            TextSettings.HorzAlign = Center
+            Text = 'Localiza'#231#227'o'
+          end
+          object SpeedButton1: TSpeedButton
+            Align = Left
+            IconTintColor = claWhite
+            Margins.Left = 8.000000000000000000
+            Position.X = 8.000000000000000000
+            Size.Width = 48.000000000000000000
+            Size.Height = 48.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'backtoolbutton'
+            Text = 'Go to <Tab>'
+            OnClick = spbVoltarClick
+          end
+        end
+        object lstCliente: TListBox
+          Align = Top
+          Position.Y = 48.000000000000000000
+          Size.Width = 385.000000000000000000
+          Size.Height = 41.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          DisableFocusEffect = True
+          DefaultItemStyles.ItemStyle = ''
+          DefaultItemStyles.GroupHeaderStyle = ''
+          DefaultItemStyles.GroupFooterStyle = ''
+          Viewport.Width = 385.000000000000000000
+          Viewport.Height = 41.000000000000000000
+          object ListBoxItem1: TListBoxItem
+            Size.Width = 385.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            object Label1: TLabel
+              Align = Left
+              Margins.Left = 8.000000000000000000
+              Position.X = 8.000000000000000000
+              Size.Width = 82.000000000000000000
+              Size.Height = 40.000000000000000000
+              Size.PlatformDefault = False
+              Text = 'Cliente'
+            end
+            object edtCliente: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              Align = Client
+              TabOrder = 1
+              Margins.Top = 4.000000000000000000
+              Margins.Right = 8.000000000000000000
+              Margins.Bottom = 4.000000000000000000
+              Size.Width = 255.000000000000000000
+              Size.Height = 32.000000000000000000
+              Size.PlatformDefault = False
+            end
+            object spbSelCli: TSpeedButton
+              Align = Right
+              Position.X = 353.000000000000000000
+              Position.Y = 4.000000000000000000
+              Size.Width = 32.000000000000000000
+              Size.Height = 32.000000000000000000
+              Size.PlatformDefault = False
+              StyleLookup = 'searcheditbutton'
+              Text = 'spbSelCli'
+              OnClick = spbSelCliClick
+            end
+          end
+        end
+      end
+      object tbItemClientes: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 129.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Clientes'
+        ExplicitSize.cx = 68.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        object ListView2: TListView
+          ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+          ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          Align = Client
+          Size.Width = 385.000000000000000000
+          Size.Height = 496.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          ItemAppearanceObjects.ItemObjects.Text.Width = 278.000000000000000000
+          ItemAppearanceObjects.ItemObjects.Text.Height = 43.000000000000000000
+          ItemAppearanceObjects.ItemObjects.Text.PlaceOffset.Y = 9.000000000000000000
+          ItemAppearanceObjects.ItemObjects.Detail.Width = 278.000000000000000000
+          ItemAppearanceObjects.ItemObjects.Detail.Height = 60.000000000000000000
+          ItemAppearanceObjects.ItemObjects.Detail.PlaceOffset.Y = -8.000000000000000000
+          ItemAppearanceObjects.FooterObjects.Text.Width = 348.000000000000000000
+          ItemAppearanceObjects.FooterObjects.Text.Height = 48.000000000000000000
+          StyleLookup = 'listviewstyle'
+          OnItemClick = ListView2ItemClick
+          ShowSelection = False
+        end
+      end
+    end
+  end
+  inherited ActionList1: TActionList
+    Left = 312
+    Top = 496
+  end
+  object LocSensor: TLocationSensor
+    LocationChange = lctLarge
+    OnLocationChanged = LocSensorLocationChanged
+    Left = 48
+    Top = 498
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSet = DM.qryCheckin
+    ScopeMappings = <>
+    Left = 136
+    Top = 434
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 52
+    Top = 437
+    object LinkListControlToField1: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      Control = ListView1
+      FillExpressions = <
+        item
+          SourceMemberName = 'DT_CHECKIN'
+          ControlMemberName = 'Detail2'
+        end
+        item
+          SourceMemberName = 'DT_CHECKOUT'
+          ControlMemberName = 'Detail3'
+        end
+        item
+          SourceMemberName = 'Nome'
+          ControlMemberName = 'Detail1'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+    object LinkListControlToField2: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB2
+      FieldName = 'Nome'
+      Control = ListView2
+      FillExpressions = <
+        item
+          SourceMemberName = 'Codigo'
+          ControlMemberName = 'Detail'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+  object BindSourceDB2: TBindSourceDB
+    DataSet = DM.qryClientes
+    ScopeMappings = <>
+    Left = 216
+    Top = 432
+  end
+  object fgActivityDialog: TfgActivityDialog
+    Left = 312
+    Top = 433
+  end
+end

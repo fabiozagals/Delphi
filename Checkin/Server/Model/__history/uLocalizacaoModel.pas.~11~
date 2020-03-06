@@ -1,0 +1,159 @@
+unit uLocalizacaoModel;
+
+interface
+
+uses
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, REST.Json, System.JSON,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, System.SysUtils, uConexao,
+  System.Generics.Collections;
+
+
+type
+  TLocalizacaoModel = Class
+  private
+    FBairro: String;
+    FNome: String;
+    FCidade: String;
+    FPais: String;
+    FEndereco: String;
+    FEstado: String;
+    FDataHora: TDateTime;
+
+    Conn : TConexao;
+    Query : TFDQuery;
+    FID: Integer;
+
+    procedure DeleterLocalizacao(ID: Integer);
+    procedure SetBairro(const Value: String);
+    procedure SetCidade(const Value: String);
+    procedure SetDataHora(const Value: TDateTime);
+    procedure SetEndereco(const Value: String);
+    procedure SetEstado(const Value: String);
+    procedure SetNome(const Value: String);
+    procedure SetPais(const Value: String);
+    procedure SetID(const Value: Integer);
+  public
+    property ID : Integer read FID write SetID;
+    property Nome : String read FNome write SetNome;
+    property Endereco : String read FEndereco write SetEndereco;
+    property Bairro : String read FBairro write SetBairro;
+    property Cidade : String read FCidade write SetCidade;
+    property Estado : String read FEstado write SetEstado;
+    property Pais : String read FPais write SetPais;
+    property DataHora : TDateTime read FDataHora write SetDataHora;
+
+    function Obter : TJSONArray;
+    function Incluir(JSONObject : TJSONObject) : TJSONValue;
+    function Alterar(JSONObject : TJSONObject) : TJSONValue;
+    procedure Excluir(ID : Integer);
+  end;
+
+implementation
+
+{ TLocalizacao }
+
+uses uLocalizacaoDao, uSystem.JSONUtil;
+
+function TLocalizacaoModel.Obter : TJSONArray;
+var
+  LocDao : TLocalizacaoDao;
+  Lista  : TObjectList<TLocalizacaoModel>;
+begin
+  LocDao := TLocalizacaoDao.Create;
+  try
+    Lista := LocDao.Obter;
+    try
+      Result := TJSONUtil.ObjetoListaParaJson<TLocalizacaoModel>(Lista);
+    finally
+      FreeAndNil(Lista);
+    end;
+  finally
+    FreeAndNil(LocDao);
+  end;
+end;
+
+function TLocalizacaoModel.Incluir(JSONObject : TJSONObject) : TJSONValue;
+begin
+  try
+    Query.Close;
+    Query.SQL.Add('Insert Into Checkin (Usuario, Endereco, Bairro, Cidade, Estado, Pais) Values (:Usuario, :Endereco, :Bairro. :Cidade, :Estado, :Pais)');
+    Query.Params.ParamByName('Usuario').AsString  := Self.Nome;
+    Query.Params.ParamByName('Endereco').AsString := Self.Endereco;
+    Query.Params.ParamByName('Bairro').AsString   := Self.Bairro;
+    Query.Params.ParamByName('Cidade').AsString   := Self.Cidade;
+    Query.Params.ParamByName('Estado').AsString   := Self.Estado;
+    Query.Params.ParamByName('Pais').AsString     := Self.Pais;
+    Query.ExecSQL;
+  finally
+    FreeAndNil(Query);
+  end;
+end;
+
+function TLocalizacaoModel.Alterar(JSONObject : TJSONObject) : TJSONValue;
+begin
+
+end;
+
+procedure TLocalizacaoModel.Excluir(ID: Integer);
+begin
+
+end;
+
+procedure TLocalizacaoModel.DeleterLocalizacao(ID: Integer);
+var
+  Query : TFDQuery;
+begin
+  Query := TFDQuery.Create(nil);
+  try
+    Query.Close;
+    Query.SQL.Add('Delete From Checkin Where ID = :ID');
+    Query.Params.ParamByName('ID').AsInteger := ID;
+    Query.ExecSQL;
+  finally
+    FreeAndNil(Query);
+  end;
+end;
+
+procedure TLocalizacaoModel.SetBairro(const Value: String);
+begin
+  FBairro := Value;
+end;
+
+procedure TLocalizacaoModel.SetCidade(const Value: String);
+begin
+  FCidade := Value;
+end;
+
+procedure TLocalizacaoModel.SetDataHora(const Value: TDateTime);
+begin
+  FDataHora := Value;
+end;
+
+procedure TLocalizacaoModel.SetEndereco(const Value: String);
+begin
+  FEndereco := Value;
+end;
+
+procedure TLocalizacaoModel.SetEstado(const Value: String);
+begin
+  FEstado := Value;
+end;
+
+procedure TLocalizacaoModel.SetID(const Value: Integer);
+begin
+  FID := Value;
+end;
+
+procedure TLocalizacaoModel.SetNome(const Value: String);
+begin
+  FNome := Value;
+end;
+
+procedure TLocalizacaoModel.SetPais(const Value: String);
+begin
+  FPais := Value;
+end;
+
+end.

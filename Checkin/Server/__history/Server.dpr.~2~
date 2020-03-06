@@ -1,0 +1,21 @@
+program Server;
+{$APPTYPE GUI}
+
+uses
+  Vcl.Forms,
+  Web.WebReq,
+  IdHTTPWebBrokerBridge,
+  uPrincipal in 'uPrincipal.pas' {Form1},
+  uSM in 'uSM.pas' {SM: TDSServerModule},
+  uSC in 'uSC.pas' {SC: TDataModule},
+  uWM in 'uWM.pas' {WM: TWebModule};
+
+{$R *.res}
+
+begin
+  if WebRequestHandler <> nil then
+    WebRequestHandler.WebModuleClass := WebModuleClass;
+  Application.Initialize;
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

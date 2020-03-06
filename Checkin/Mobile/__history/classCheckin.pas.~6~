@@ -1,0 +1,95 @@
+unit classCheckin;
+
+interface
+
+type
+  TClassCheckin = Class
+    private
+    FEmpresa: String;
+    FDtCheckout: TDateTime;
+    FChkOutLatitude: Double;
+    FDtCheckin: TDateTime;
+    FChkInLatitude: Double;
+    FChkOutLongitude: Double;
+    FEndereco: String;
+    FChkInLongitude: Double;
+
+    procedure SetEmpresa(const Value: String);
+    procedure SetChkInLatitude(const Value: Double);
+    procedure SetChkInLongitude(const Value: Double);
+    procedure SetChkOutLatitude(const Value: Double);
+    procedure SetChkOutLongitude(const Value: Double);
+    procedure SetDtCheckin(const Value: TDateTime);
+    procedure SetDtCheckout(const Value: TDateTime);
+    procedure SetEndereco(const Value: String);
+
+    public
+      property Empresa : String read FEmpresa write SetEmpresa;
+      property Endereco : String read FEndereco write SetEndereco;
+      property DtCheckin : TDateTime read FDtCheckin write SetDtCheckin;
+      property ChkInLatitude : Double read FChkInLatitude write SetChkInLatitude;
+      property ChkInLongitude : Double read FChkInLongitude write SetChkInLongitude;
+      property DtCheckout : TDateTime read FDtCheckout write SetDtCheckout;
+      property ChkOutLatitude : Double read FChkOutLatitude write SetChkOutLatitude;
+      property ChkOutLongitude : Double read FChkOutLongitude write SetChkOutLongitude;
+
+      Constructor Create;
+      Destructor  Destroy; Override;
+  end;
+
+implementation
+
+{ TClassCheckin }
+
+constructor TClassCheckin.Create;
+begin
+
+end;
+
+destructor TClassCheckin.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TClassCheckin.SetChkInLatitude(const Value: Double);
+begin
+  FChkInLatitude := Value;
+end;
+
+procedure TClassCheckin.SetChkInLongitude(const Value: Double);
+begin
+  FChkInLongitude := Value;
+end;
+
+procedure TClassCheckin.SetChkOutLatitude(const Value: Double);
+begin
+  FChkOutLatitude := Value;
+end;
+
+procedure TClassCheckin.SetChkOutLongitude(const Value: Double);
+begin
+  FChkOutLongitude := Value;
+end;
+
+procedure TClassCheckin.SetDtCheckin(const Value: TDateTime);
+begin
+  FDtCheckin := Value;
+end;
+
+procedure TClassCheckin.SetDtCheckout(const Value: TDateTime);
+begin
+  FDtCheckout := Value;
+end;
+
+procedure TClassCheckin.SetEmpresa(const Value: String);
+begin
+  FEmpresa := Value;
+end;
+
+procedure TClassCheckin.SetEndereco(const Value: String);
+begin
+  FEndereco := Value;
+end;
+
+end.

@@ -1,0 +1,19 @@
+inherited frmFrmModelo2: TfrmFrmModelo2
+  Caption = 'frmFrmModelo2'
+  DesignerMasterStyle = 3
+  inherited tbctrlPrincipal: TTabControl
+    Sizes = (
+      316s
+      431s
+      316s
+      431s)
+    inherited tbitemListagem: TTabItem
+      ExplicitSize.cx = 160.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+    end
+    inherited tbitemEdicao: TTabItem
+      ExplicitSize.cx = 160.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+    end
+  end
+end

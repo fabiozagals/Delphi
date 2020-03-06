@@ -1,0 +1,88 @@
+object DM: TDM
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 315
+  Width = 538
+  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+    Left = 450
+    Top = 16
+  end
+  object FDStanStorageBinLink1: TFDStanStorageBinLink
+    Left = 450
+    Top = 72
+  end
+  object fdcConexao: TFDConnection
+    Params.Strings = (
+      'Database=E:\Projeto_Checkin\Mobile\database\Chkliphit.s3db'
+      'OpenMode=ReadWrite'
+      'LockingMode=Normal'
+      'DriverID=SQLite')
+    Connected = True
+    LoginPrompt = False
+    Left = 32
+    Top = 8
+  end
+  object qryCheckin: TFDQuery
+    Connection = fdcConexao
+    SQL.Strings = (
+      'SELECT '
+      '  CHK.*,'
+      '  CLI.NOME'
+      'FROM '
+      '  CHECKIN CHK'
+      '  INNER JOIN CLIENTES CLI ON CHK.EMPRESA = CLI.CODIGO')
+    Left = 32
+    Top = 64
+    object qryCheckinID: TFDAutoIncField
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInWhere, pfInKey]
+    end
+    object qryCheckinEMPRESA: TStringField
+      FieldName = 'EMPRESA'
+      Origin = 'EMPRESA'
+      Required = True
+      Size = 10
+    end
+    object qryCheckinDT_CHECKIN: TDateTimeField
+      FieldName = 'DT_CHECKIN'
+      Origin = 'DT_CHECKIN'
+      Required = True
+    end
+    object qryCheckinCHKIN_LATITUDE: TFloatField
+      FieldName = 'CHKIN_LATITUDE'
+      Origin = 'CHKIN_LATITUDE'
+    end
+    object qryCheckinCHKIN_LONGITUDE: TFloatField
+      FieldName = 'CHKIN_LONGITUDE'
+      Origin = 'CHKIN_LONGITUDE'
+    end
+    object qryCheckinDT_CHECKOUT: TDateTimeField
+      FieldName = 'DT_CHECKOUT'
+      Origin = 'DT_CHECKOUT'
+    end
+    object qryCheckinCHKOUT_LATITUDE: TFloatField
+      FieldName = 'CHKOUT_LATITUDE'
+      Origin = 'CHKOUT_LATITUDE'
+    end
+    object qryCheckinCHKOUT_LONGITUDE: TFloatField
+      FieldName = 'CHKOUT_LONGITUDE'
+      Origin = 'CHKOUT_LONGITUDE'
+    end
+    object qryCheckinNome: TStringField
+      AutoGenerateValue = arDefault
+      FieldName = 'Nome'
+      Origin = 'Nome'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 50
+    end
+  end
+  object qryClientes: TFDQuery
+    Connection = fdcConexao
+    SQL.Strings = (
+      'SELECT * FROM CLIENTES')
+    Left = 32
+    Top = 120
+  end
+end

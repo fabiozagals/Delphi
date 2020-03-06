@@ -1,0 +1,23 @@
+inherited frmCheckout: TfrmCheckout
+  Caption = 'frmFrmModelo2'
+  DesignerMasterStyle = 3
+  inherited lytBase: TLayout
+    inherited tbctrlPrincipal: TTabControl
+      Sizes = (
+        385s
+        496s
+        385s
+        496s)
+      inherited tbitemListagem: TTabItem
+        Size.Width = 70.000000000000000000
+        ExplicitSize.cx = 160.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+      end
+      inherited tbitemEdicao: TTabItem
+        Size.Width = 55.000000000000000000
+        ExplicitSize.cx = 160.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+      end
+    end
+  end
+end

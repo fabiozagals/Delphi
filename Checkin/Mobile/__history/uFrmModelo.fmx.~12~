@@ -1,0 +1,94 @@
+object frmFrmModelo: TfrmFrmModelo
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 545
+  ClientWidth = 385
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 3
+  object lytBase: TLayout
+    Align = Client
+    Size.Width = 385.000000000000000000
+    Size.Height = 545.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object tbctrlPrincipal: TTabControl
+      Align = Client
+      Size.Width = 385.000000000000000000
+      Size.Height = 545.000000000000000000
+      Size.PlatformDefault = False
+      TabHeight = 49.000000000000000000
+      TabIndex = 0
+      TabOrder = 0
+      TabPosition = PlatformDefault
+      Sizes = (
+        385s
+        496s
+        385s
+        496s)
+      object tbitemListagem: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 192.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Listagem'
+        ExplicitSize.cx = 160.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        object toolSuperior: TToolBar
+          Size.Width = 385.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object lblTitulo: TLabel
+            Align = Contents
+            Size.Width = 385.000000000000000000
+            Size.Height = 48.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Center
+            Text = 'lblTitulo'
+          end
+          object spbMenu: TSpeedButton
+            Align = Left
+            Margins.Left = 8.000000000000000000
+            Position.X = 8.000000000000000000
+            Size.Width = 48.000000000000000000
+            Size.Height = 48.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'backtoolbutton'
+            Text = 'Go to <Tab>'
+            OnClick = spbMenuClick
+          end
+        end
+      end
+      object tbitemEdicao: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 193.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Edi'#231#227'o'
+        ExplicitSize.cx = 160.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Left = 32
+    Top = 424
+    object actMudarAba: TChangeTabAction
+      Category = 'Tab'
+    end
+  end
+end

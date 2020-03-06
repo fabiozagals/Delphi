@@ -1,0 +1,67 @@
+unit uFrmModelo;
+
+interface
+
+uses
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, System.Actions,
+  FMX.ActnList, FMX.TabControl, FMX.StdCtrls, FMX.Controls.Presentation,
+  FMX.Layouts;
+
+type
+  TfrmFrmModelo = class(TForm)
+    lytBase: TLayout;
+    tbctrlPrincipal: TTabControl;
+    tbitemListagem: TTabItem;
+    toolSuperior: TToolBar;
+    lblTitulo: TLabel;
+    spbMenu: TSpeedButton;
+    tbitemEdicao: TTabItem;
+    ToolBar1: TToolBar;
+    Label1: TLabel;
+    spbVoltar: TSpeedButton;
+    ActionList1: TActionList;
+    actMudarAba: TChangeTabAction;
+    procedure FormCreate(Sender: TObject);
+    procedure spbMenuClick(Sender: TObject);
+    procedure spbVoltarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  protected
+    procedure MudarAba(ATabItem: TTabItem; Sender: TObject);
+  end;
+
+var
+  frmFrmModelo: TfrmFrmModelo;
+
+implementation
+
+{$R *.fmx}
+
+uses uPrincipal;
+
+procedure TfrmFrmModelo.FormCreate(Sender: TObject);
+begin
+  spbMenu.Width := 70;
+  spbVoltar.Width := 70;
+end;
+
+procedure TfrmFrmModelo.MudarAba(ATabItem: TTabItem; Sender: TObject);
+begin
+  actMudarAba.Tab := ATabItem;
+  actMudarAba.ExecuteTarget(Sender);
+end;
+
+procedure TfrmFrmModelo.spbMenuClick(Sender: TObject);
+begin
+  MudarAba(frmPrincipal.tbitemMenu, Sender);
+end;
+
+procedure TfrmFrmModelo.spbVoltarClick(Sender: TObject);
+begin
+  MudarAba(tbitemListagem, Sender);
+end;
+
+end.

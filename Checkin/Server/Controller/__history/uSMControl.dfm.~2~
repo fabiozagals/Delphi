@@ -1,0 +1,5 @@
+object SMControl: TSMControl
+  OldCreateOrder = False
+  Height = 150
+  Width = 215
+end

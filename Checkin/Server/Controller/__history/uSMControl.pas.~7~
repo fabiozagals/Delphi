@@ -1,0 +1,53 @@
+unit uSMControl;
+
+interface
+
+uses System.SysUtils, System.Classes, System.Json,
+    DataSnap.DSProviderDataModuleAdapter, REST.Json,
+    Datasnap.DSServer, Datasnap.DSAuth, uLocalizacaoModel;
+
+type
+  TSMControl = class(TDSServerModule)
+  private
+    { Private declarations }
+    FLocalizacao : TLocalizacaoModel;
+  public
+    { Public declarations }
+    function Localizacao : TJSONObject; // GET LOCALIZA플O
+    function acceptLocalizacao(JsonObject : TJSONObject) : TJSONValue; // PUT LOCALIZA플O
+    function updateLocalizacao(JsonObject : TJSONObject) : TJSONValue; // POST LOCALIZA플O
+    function cancelLocalizacao(ID : Integer) : TJSONValue; // DELETE LOCALIZA플O
+  end;
+
+implementation
+
+
+{$R *.dfm}
+
+uses uLocalizacao;
+
+
+{ TSM }
+
+function TSMControl.Localizacao: TJSONObject;
+begin
+  Result := FLocalizacao.Obter;
+end;
+
+function TSMControl.updateLocalizacao(JsonObject : TJSONObject): TJSONValue;
+begin
+  Result := TJSONString.Create('Registro Alterado!');
+end;
+
+function TSMControl.acceptLocalizacao(JsonObject : TJSONObject): TJSONValue;
+begin
+  Result := FLocalizacao.Incluir(JsonObject);
+end;
+
+function TSMControl.cancelLocalizacao(ID : Integer): TJSONValue;
+begin
+  Result := FLocalizacao.Deletar(ID);
+end;
+
+end.
+
